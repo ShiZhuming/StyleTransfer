@@ -66,7 +66,7 @@ parser.add_argument('--lr', type=float, default=1e-4)
 parser.add_argument('--lr_decay', type=float, default=5e-5)
 parser.add_argument('-i','--iter_times', type=int, default=1000)
 parser.add_argument('-b','--batch_size', type=int, default=4)
-parser.add_argument('--lamda', type=float, default=10.0)
+parser.add_argument('--lamda', type=float, default=1.0)
 parser.add_argument('--alpha', type=float, default=1.0)
 parser.add_argument('--n_threads', type=int, default=0)
 
@@ -146,6 +146,7 @@ def train(decoder,content_loader,style_loader):
 
     print('TRIANING COMPLETED.')
     print('Time cost: {}s.'.format(toc-tic))
+    print('model saved as:  '+args.save_dir)
 
 
 def main():
