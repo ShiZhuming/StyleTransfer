@@ -132,12 +132,13 @@ class Decoder(nn.Module):
 
 ##############定义前传网络#############
 class FPnet(nn.Module):
-    def __init__(self,decoder):
+    def __init__(self,decoder,test=False):
         super(FPnet, self).__init__()
         self.encoder = vgg
         self.decoder = decoder
         self.mseloss = nn.MSELoss()
         self.encoder.load_state_dict(torch.load('model/vgg_normalised.pth'))
+        if test: self.encoder=self.encoder.eval()
         for param in self.encoder.parameters():
             param.requires_grad = False#对encoder不进行梯度下降
 
@@ -161,8 +162,9 @@ class FPnet(nn.Module):
 
     def forward(self,content,style,alpha=1.0,lamda=10.0,require_loss=True):
         '''一次前传计算损失'''
-        content=content.to(device)
-        style=style.to(device)
+        if True:
+            content=content.to(device)
+            style=style.to(device)
 
         style_features=self.encode(style)
         content_features=self.encode(content)
