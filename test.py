@@ -21,56 +21,99 @@ Optional parameters:
 
 
 import os
+import glob
 import torch
 import argparse
 import torchvision.transforms as transforms
 from net import FPnet,Decoder
 from PIL import Image, ImageFile
-
+from function import coral
 from torchvision.utils import save_image
 
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 ####################options###################
 parser = argparse.ArgumentParser()
 # Basic options
-parser.add_argument('-c','--content_img',type=str, required=True,
+parser.add_argument('-c','--content',type=str, 
                     help='path of your content image')
-parser.add_argument('-s','--style_img',type=str, required=True,
+parser.add_argument('-s','--style',type=str, 
+                    help='path of your style image')
+parser.add_argument('-cd','--content_dir',type=str, 
+                    help='path of your style image')
+parser.add_argument('-sd','--style_dir',type=str, 
                     help='path of your style image')
 parser.add_argument('-m','--model_path', default='model/decoder.pth',
                     help='path of the trained model')
 parser.add_argument('--lamda', type=float, default=10.0)
 parser.add_argument('--alpha', type=float, default=1.0)
-
-parser.add_argument('--save_dir', default='result/result.jpg',
+parser.add_argument('--preserve_color', type=bool, default=False,
+                   help='preserve the color of the content image')
+parser.add_argument('--save_dir', default='result',
                     help='Directory to save the result image')
 
 args = parser.parse_args()
 
-def test(contentpath,stylepath):
+
+
+def test_transform(size):
+    transform_list = []
+    transform_list.append(transforms.Resize(size))
+    transform_list.append(transforms.ToTensor())
+    transform = transforms.Compose(transform_list)
+    return transform
+
+
+
+
+
+
+
+
+def test(contentpath,stylepath,multi=False):
     '''一次前传得到风格化图像'''
+    if multi==False:
+        content_name=(contentpath.split('/')[-1]).split('.')[0]
+        style_name=(stylepath.split('/')[-1]).split('.')[0]
+    else:
+        content_name=(contentpath.split('\\')[-1]).split('.')[0]
+        style_name=(stylepath.split('\\')[-1]).split('.')[0]
+
+    transfer=test_transform(512)
+
     contentimg = Image.open(str(contentpath)).convert('RGB')
     styleimg = Image.open(str(stylepath)).convert('RGB')
-    contentimg=transforms.Compose([transforms.ToTensor()])(contentimg)
-    styleimg=transforms.Compose([transforms.ToTensor()])(styleimg)
+    contentimg=transfer(contentimg).unsqueeze(0)
+    styleimg=transfer(styleimg).unsqueeze(0)
 
+    if args.preserve_color: styleimg = coral(styleimg, contentimg)
 
-    contentimg=contentimg.view(1,3,contentimg.shape[1],contentimg.shape[2])
-    styleimg=styleimg.view(1,3,styleimg.shape[1],styleimg.shape[2])
-
-
-
-    decoder=Decoder()
+    decoder=Decoder().to(device).eval()
     decoder.load_state_dict(torch.load(args.model_path))
 
-    fbnet=FPnet(decoder).cuda()
+    fbnet=FPnet(decoder,True).to(device).eval()
     output=fbnet(contentimg,styleimg,alpha=args.alpha,lamda=args.lamda,require_loss=False)
 
-
-    save_image(output.cpu(),args.save_dir)
-    print('image saved.')
+    image_name=args.save_dir+'/'+content_name+'+'+style_name+'.jpg'
+    save_image(output.cpu(),image_name)
+    print('image saved  as:  '+image_name)
+    contentimg.detach()
+    styleimg.detach()
 
 
 if __name__ == "__main__":
-    test(args.content_img,args.style_img)
+    assert (args.content or args.content_dir)
+    assert (args.style or args.style_dir)
+    if args.content and args.style:
+        test(args.content,args.style)
+    elif args.content_dir and args.style_dir:
+        contents=glob.glob(args.content_dir+"/*.jpg")
+        styles=glob.glob(args.style_dir+"/*.jpg")
+        for content in contents:
+            for style in styles:
+                test(content,style,multi=True)
+    
+    print('COMPLETED.')
+                
+
+        
