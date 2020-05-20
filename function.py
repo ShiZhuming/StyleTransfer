@@ -1,5 +1,8 @@
+import cv2
 import torch
 import numpy as np
+import torchvision.transforms as transforms
+from PIL import Image
 from torch.utils import data
 
 
@@ -91,3 +94,30 @@ def coral(source, target):
                         target_f_mean.expand_as(source_f_norm)
 
     return source_f_transfer.view(source.size())
+
+
+def change_color(source,target):
+    transform=transforms.Resize(size=(512,512))
+    detransform=transforms.Resize(size=(source.size[1],source.size[0]))
+
+    source=np.asarray(transform(source))
+    target=np.asarray(transform(target))
+
+    source=cv2.cvtColor(source,cv2.COLOR_RGB2HSV)
+    target=cv2.cvtColor(target,cv2.COLOR_RGB2HSV)
+
+    for i in range(512):
+        for j in range(512):
+            source[i][j][0]=target[i][j][0]
+            source[i][j][1]=target[i][j][1]
+    
+    source=cv2.cvtColor(source,cv2.COLOR_HSV2BGR)
+    source=Image.fromarray(source)
+    source=detransform(source)
+
+    return source
+
+
+
+
+
