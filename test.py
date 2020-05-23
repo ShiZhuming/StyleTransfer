@@ -21,13 +21,15 @@ Optional parameters:
 
 
 import os
+import cv2
 import glob
 import torch
 import argparse
+import numpy as np
 import torchvision.transforms as transforms
 from net import FPnet,Decoder
 from PIL import Image, ImageFile
-from function import coral
+from function import coral,change_color
 from torchvision.utils import save_image
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -47,7 +49,7 @@ parser.add_argument('-m','--model_path', default='model/decoder.pth',
                     help='path of the trained model')
 parser.add_argument('--lamda', type=float, default=10.0)
 parser.add_argument('--alpha', type=float, default=1.0)
-parser.add_argument('--preserve_color', type=bool, default=False,
+parser.add_argument('-p','--preserve_color', type=bool, default=False,
                    help='preserve the color of the content image')
 parser.add_argument('--save_dir', default='result',
                     help='Directory to save the result image')
@@ -83,10 +85,12 @@ def test(contentpath,stylepath,multi=False):
 
     contentimg = Image.open(str(contentpath)).convert('RGB')
     styleimg = Image.open(str(stylepath)).convert('RGB')
+    if args.preserve_color: styleimg = change_color(styleimg, contentimg)
     contentimg=transfer(contentimg).unsqueeze(0)
     styleimg=transfer(styleimg).unsqueeze(0)
 
-    if args.preserve_color: styleimg = coral(styleimg, contentimg)
+    #if args.preserve_color: styleimg = coral(styleimg, contentimg)
+    
 
     decoder=Decoder().to(device).eval()
     decoder.load_state_dict(torch.load(args.model_path))
