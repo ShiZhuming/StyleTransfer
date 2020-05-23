@@ -3,7 +3,7 @@ import torch.nn as nn
 import torchvision.models as models
 from function import AdaIN,get_mean_std
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")#训练设备
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")#训练设备
 
 
 
@@ -137,7 +137,7 @@ class FPnet(nn.Module):
         self.encoder = vgg
         self.decoder = decoder
         self.mseloss = nn.MSELoss()
-        self.encoder.load_state_dict(torch.load('model/vgg_normalised.pth'))
+        self.encoder.load_state_dict(torch.load('app/static/vgg_normalised.pth'))
         if test: self.encoder=self.encoder.eval()
         for param in self.encoder.parameters():
             param.requires_grad = False#对encoder不进行梯度下降
@@ -163,8 +163,10 @@ class FPnet(nn.Module):
     def forward(self,content,style,alpha=1.0,lamda=10.0,require_loss=True):
         '''一次前传计算损失'''
         if True:
-            content=content.to(device)
-            style=style.to(device)
+            # content=content.to(device)
+            # style=style.to(device)
+            content=content.to(torch.device("cpu"))
+            style=style.to(torch.device("cpu"))
 
         style_features=self.encode(style)
         content_features=self.encode(content)
