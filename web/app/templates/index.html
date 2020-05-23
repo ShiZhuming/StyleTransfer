@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- 基本信息 -->
+        <title>Style Transfer | Welcome</title>
+        <meta name="description" content="Transform your photo style without PS !">
+        <meta name="keywords" content="AI pku, style transfer, Convolutional Neural Network, Artificial neural networks, 风格迁移, 图像风格迁移">
+        <meta name="description" content="Transform your photo style without PS !">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <!-- foundation -->
+        <link rel="stylesheet" href="https://deepart-io.s3.amazonaws.com/CACHE/css/1aeb4473ff54.css" type="text/css" />
+        <link rel="stylesheet" href="https://deepart-io.s3.amazonaws.com/CACHE/css/44ccd66c877e.css" type="text/css" />
+        
+        <!-- 提供字体 -->
+        <link rel="stylesheet" href="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
+        <script type="text/javascript" src="https://deepart-io.s3.amazonaws.com/CACHE/js/ad004c2f14b6.js"></script>
+    </head>
+
+    <body>
+
+        <!-- 顶部导航 -->
+
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <!-- <div class="container-fluid"> -->
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#example-navbar-collapse">
+                        <span class="sr-only">切换导航</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html" style="font-weight: bold">Style Transfer</a>
+                </div>
+                <div class="collapse navbar-collapse" id="example-navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="index.html" style="font-weight: bold; text-decoration: underline;">Try it!</a></li>
+                        <li><a href="#">Our methods</a></li>
+                        <li><a href="https://github.com/ShiZhuming/StyleTransfer/">Source code</a></li>
+                        <!-- <li><a href="#">Contact us</a></li> -->
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Contact us <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Our team</a></li>
+                                <li class="divider"></li>
+                                <li><a href="https://github.com/ShiZhuming/">Zhuming Shi</a></li>
+                                <li><a href="https://github.com/WebboHsu">Weibo Xu</a></li>
+                                <li><a href="https://github.com/ZYM-PKU">Yiming Zhao</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 导言区 -->
+
+        <!-- 图像区 -->
+
+        <div class="content-container">
+            <div class="container">
+                <div class="page-header">
+                    <h1></h1>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row" style="margin-bottom: 20px">
+                    <div class="col-md-6">
+                        <h1><font color='gray'>Photo</font></h1>
+                        <ul class="nav nav-tabs"></ul>
+                        <div class="tab-content" data-input="id_content_img">
+                            <div id="my-photos" class="tab-pane fade">
+                                <div class="container-fluid">
+                                    <p class="no-imgs"><font color='gray'>You haven't uploaded any photos yet.</font></p>
+                                </div>
+                            </div>
+                            <div id="upload-photo" class="tab-pane fade in active">
+                                <form enctype="multipart/form-data" method="post" id="content-image-form" class="dropzone needsclick dz-clickable selected" action="/image/upload/content" data-hash="">
+                                    <div class="dz-message needsclick">
+                                        <p style="font-weight: bold"><font size="5" color="gray">Upload your photo as the content.</font></p>
+                                        <p><font color='gray'>(Drop your photo here or click to select one from your computer.)</font></p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h1><font color='gray'>Style</font></h1>
+                        <ul class="nav nav-tabs"></ul>
+                        <div class="tab-content" data-input="id_content_img">
+                            <div id="my-photos" class="tab-pane fade">
+                              <div class="container-fluid">
+                                <p class="no-imgs"><font color='gray'>You haven't uploaded any photos yet.</font></p>
+                              </div>
+                            </div>
+                            
+                            <div id="upload-style" class="tab-pane fade in active">
+                                <form enctype="multipart/form-data" method="post" id="style-image-form" class="dropzone needsclick dz-clickable selected" action="/image/upload/style" data-hash="">
+                                    <div class="dz-message needsclick">
+                                        <p style="font-weight: bold"><font size="5" color="gray">Upload your image as the style.</font></p>
+                                        <p><font color='gray'>(Drop your image here or click to select one from your computer.)</font></p>
+                                    </div>
+                                </form>
+                            </div>
+                          </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 提交 -->
+
+        <form action="/submit" style="margin-top: 30px" method="post" class="form-horizontal">
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">
+                    Submit
+                </button>
+            </div>
+        </form>
+
+        <!-- 底部 -->
+        
+        <footer id="footer" class="container-fluid">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <h1>Collaborators</h1>
+                        <ul class="list-unstyled">
+                            <li><a href="https://github.com/ShiZhuming/">Zhuming Shi</a></li>
+                            <li><a href="https://github.com/WebboHsu">Weibo Xu</a></li>
+                            <li><a href="https://github.com/ZYM-PKU">Yiming Zhao</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        <h1>Source Code</h1>
+                        <a href="https://github.com/ShiZhuming/StyleTransfer/" class="btn-social btn-github btn btn-sm"><span class="fa fa-github"></span>Github</a>
+                    </div>
+                </div>
+                <br />
+                <a href="http://beian.miit.gov.cn/" target="_blank">ICP证</a>
+            </div>
+        </footer>
+
+        <!-- Dropzone -->
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="https://deepart-io.s3.amazonaws.com/js/dropzone.js"></script>
+        <script type=text/javascript>
+
+            $(function() {
+                options = {
+                    parallelUploads: 1,
+                    paramName: "image",
+                    thumbnailWidth: 150,
+                    thumbnailHeight: 150,
+                    maxFiles: 1,
+                };
+    
+                content = $.extend({
+                    success: function(file, response) {
+                        $('#id_content_img').attr('value', response['hash']);
+                        $('#content-image-form').attr('data-hash', response['hash']);
+                    }
+                }, options);
+                Dropzone.options.contentImageForm = content;
+    
+                style = $.extend({
+                    success: function(file, response) {
+                        $('#id_style_img').attr('value', response['hash']);
+                        $('#style-image-form').attr('data-hash', response['hash']);
+                    }
+                }, options);
+                Dropzone.options.styleImageForm = style;
+            });
+    
+            // Select image
+            $('.img a').click(function (e) {
+                e.preventDefault()
+                $(this).parents('.tab-pane').find('.img').removeClass('selected')
+                $(this).parent().addClass('selected')
+                input = $(this).parents('.tab-content').attr('data-input')
+                hash = $(this).parent().attr('data-hash')
+                $('#' + input).attr('value', hash)
+            })
+    
+            // When tab changes update form to reflect the image selected in that tab
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                tab = $(e.target).attr('href')
+                input = $(tab).parents('.tab-content').attr('data-input')
+                selected = $(tab).find('.selected')
+                hash = $(selected).length ? $(selected).attr('data-hash') : ''
+                $('#' + input).attr('value', hash)
+            });
+    
+            // Activate default tabs
+            $('.nav-tabs a[href="#upload-photo"]').tab('show')
+    
+            $('.nav-tabs a[href="#upload-style"]').tab('show')
+    
+    
+        </script>
+
+
+    </body>
+</html>
