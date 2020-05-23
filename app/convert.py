@@ -9,11 +9,6 @@ from PIL import Image, ImageFile
 from function import coral,change_color
 from torchvision.utils import save_image
 
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-
 def test_transform(size):
     transform_list = []
     transform_list.append(transforms.Resize(size))
@@ -21,10 +16,7 @@ def test_transform(size):
     transform = transforms.Compose(transform_list)
     return transform
 
-
-
-
-def transfer(contentpath,stylepath,converted,pixel,model_path='models/20200521decoder10000_1.pth'):
+def transfer(contentpath,stylepath,converted,pixel=256,model_path='app/static/20200521decoder10000_1.pth'):
     '''一次前传得到风格化图像'''
     mytransfer=test_transform(pixel)
 
@@ -34,9 +26,13 @@ def transfer(contentpath,stylepath,converted,pixel,model_path='models/20200521de
     contentimg=mytransfer(contentimg).unsqueeze(0)
     styleimg=mytransfer(styleimg).unsqueeze(0)
 
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cpu")
 
     decoder=Decoder().to(device).eval()
-    decoder.load_state_dict(torch.load(model_path))
+    decoder.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+    # decoder = decoder.module
+    # decoder.load_state_dict(torch.load(model_path))
 
     fbnet=FPnet(decoder,True).to(device).eval()
     output=fbnet(contentimg,styleimg,alpha=1.0,lamda=1.0,require_loss=False)
