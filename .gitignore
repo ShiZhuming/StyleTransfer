@@ -127,3 +127,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# vscode
+.vscode/
+
+# test files
+test/
+*.png
+*.jpg
+*.JPG
+*.PNG
+*.gif
+*.GIF

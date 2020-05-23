@@ -8,6 +8,7 @@
         <meta name="description" content="Transform your photo style without PS !">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
@@ -51,8 +52,8 @@
                                 Contact us <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Our team</a></li>
-                                <li class="divider"></li>
+                                <!-- <li><a href="#">Our team</a></li>
+                                <li class="divider"></li> -->
                                 <li><a href="https://github.com/ShiZhuming/">Zhuming Shi</a></li>
                                 <li><a href="https://github.com/WebboHsu">Weibo Xu</a></li>
                                 <li><a href="https://github.com/ZYM-PKU">Yiming Zhao</a></li>
@@ -76,8 +77,9 @@
 
             <div class="container">
                 <div class="row" style="margin-bottom: 20px">
+                    
                     <div class="col-md-6">
-                        <h1><font color='gray'>Photo</font></h1>
+                        <h3><font color='gray'>Photo</font></h3>
                         <ul class="nav nav-tabs"></ul>
                         <div class="tab-content" data-input="id_content_img">
                             <div id="my-photos" class="tab-pane fade">
@@ -96,7 +98,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <h1><font color='gray'>Style</font></h1>
+                        <h3><font color='gray'>Style</font></h3>
                         <ul class="nav nav-tabs"></ul>
                         <div class="tab-content" data-input="id_content_img">
                             <div id="my-photos" class="tab-pane fade">
@@ -116,13 +118,18 @@
                           </div>
 
                     </div>
+                    <br />
+                    <div class="col-md-12" text-transform="capitalize">
+                        <p><font color="gray" size="6">Change your photo style in <font color="red" size="6" style="font-weight:bold;font-style:italic;">5</font> seconds!</font><p>
+                    </div>
+
                 </div>
             </div>
         </div>
 
         <!-- 提交 -->
 
-        <form action="/submit" style="margin-top: 30px" method="post" class="form-horizontal">
+        <form action="/submit" style="margin-top: 0px" method="post" class="form-horizontal">
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">
                     Submit
