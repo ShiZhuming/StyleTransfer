@@ -44,6 +44,7 @@ def transfer(contentpath,stylepath,converted,pixel=512,model_path='app/static/20
     save_image(output.cpu(),converted)
     contentimg.detach()
     styleimg.detach()
+    output.detach()
 
 
 
