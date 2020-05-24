@@ -9,6 +9,10 @@ from PIL import Image, ImageFile
 from function import coral,change_color
 from torchvision.utils import save_image
 
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")#训练设备
+
+
 def test_transform(size):
     transform_list = []
     transform_list.append(transforms.Resize(size))
@@ -16,7 +20,7 @@ def test_transform(size):
     transform = transforms.Compose(transform_list)
     return transform
 
-def transfer(contentpath,stylepath,converted,pixel=256,model_path='app/static/20200521decoder10000_1.pth'):
+def transfer(contentpath,stylepath,converted,pixel=512,model_path='app/static/20200521decoder10000_1.pth'):
     '''一次前传得到风格化图像'''
     mytransfer=test_transform(pixel)
 
@@ -27,10 +31,10 @@ def transfer(contentpath,stylepath,converted,pixel=256,model_path='app/static/20
     styleimg=mytransfer(styleimg).unsqueeze(0)
 
     # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    device = torch.device("cpu")
 
     decoder=Decoder().to(device).eval()
-    decoder.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+    decoder.load_state_dict(torch.load(model_path, map_location=device))
+
     # decoder = decoder.module
     # decoder.load_state_dict(torch.load(model_path))
 
@@ -40,14 +44,7 @@ def transfer(contentpath,stylepath,converted,pixel=256,model_path='app/static/20
     save_image(output.cpu(),converted)
     contentimg.detach()
     styleimg.detach()
+    output.detach()
 
 
 
-
-#if __name__ == "__main__":
-    #content=input()
-    #style=input()
-    #transfer(content ,style ,'d:/Code/AI/finalproject/result/result.png',512)
-                
-
-        
