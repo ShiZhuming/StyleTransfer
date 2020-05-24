@@ -20,7 +20,7 @@ def test_transform(size):
     transform = transforms.Compose(transform_list)
     return transform
 
-def transfer(contentpath,stylepath,converted,pixel=512,model_path='app/static/20200522decoder100000_1.pth'):
+def transfer(contentpath,stylepath,converted,pixel=512,model_path='app/static/20200521decoder10000_1.pth'):
     '''一次前传得到风格化图像'''
     mytransfer=test_transform(pixel)
 
@@ -38,13 +38,16 @@ def transfer(contentpath,stylepath,converted,pixel=512,model_path='app/static/20
     # decoder = decoder.module
     # decoder.load_state_dict(torch.load(model_path))
 
-    fbnet=FPnet(decoder,True).to(device).eval()
-    output=fbnet(contentimg,styleimg,alpha=1.0,lamda=1.0,require_loss=False)
+    try:
+        fbnet=FPnet(decoder,True).to(device).eval()
+        output=fbnet(contentimg,styleimg,alpha=1.0,lamda=1.0,require_loss=False)
 
-    save_image(output.cpu(),converted)
-    contentimg.detach()
-    styleimg.detach()
-    output.detach()
+        save_image(output.cpu(),converted)
+        contentimg.detach()
+        styleimg.detach()
+        output.detach()
+        return True
+    except: return False
 
 
 
