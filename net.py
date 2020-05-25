@@ -137,7 +137,7 @@ class FPnet(nn.Module):
         self.encoder = vgg
         self.decoder = decoder
         self.mseloss = nn.MSELoss()
-        self.encoder.load_state_dict(torch.load('app/static/vgg_normalised.pth'))
+        self.encoder.load_state_dict(torch.load('static/vgg_normalised.pth'))
         if test: self.encoder=self.encoder.eval()
         for param in self.encoder.parameters():
             param.requires_grad = False#对encoder不进行梯度下降

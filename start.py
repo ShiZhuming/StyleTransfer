@@ -43,7 +43,7 @@ def upload_content():
     if request.method == 'POST':
         f = request.files.get('image')
         if allowed_file(f.filename):
-            f.save('./app/image/upload/content/content.png')
+            f.save('./image/upload/content/content.png')
             return render_template('index.html')
         else :
             # 异常处理！
@@ -53,36 +53,36 @@ def upload_content():
 def upload_style():
     if request.method == 'POST':
         f = request.files.get('image')
-        f.save('./app/image/upload/style/style.png')
+        f.save('./image/upload/style/style.png')
         return render_template('index.html')
 
 @app.route('/submit',methods = ['GET','POST'])
 def submit():
     # 执行风格化函数，生成图像。
-    contentpath = abspath('app/image/upload/content/content.png')
-    stylepath = abspath('app/image/upload/style/style.png')
-    convertpath = abspath('app/image/upload/convert/convert.png')
+    contentpath = abspath('image/upload/content/content.png')
+    stylepath = abspath('image/upload/style/style.png')
+    convertpath = abspath('image/upload/convert/convert.png')
     transfer(contentpath, stylepath, convertpath)
     return render_template('submissions.html')
 
 @app.route('/image/upload/content/content.png', methods = ['GET', 'POST'])
 def content():
     if request.method == 'GET':
-        response = make_response(open('app/image/upload/content/content.png','rb').read())
+        response = make_response(open('image/upload/content/content.png','rb').read())
         response.headers['Content-Type'] = 'image/png'
         return response
 
 @app.route('/image/upload/style/style.png', methods = ['GET', 'POST'])
 def style():
     if request.method == 'GET':
-        response = make_response(open('app/image/upload/style/style.png','rb').read())
+        response = make_response(open('image/upload/style/style.png','rb').read())
         response.headers['Content-Type'] = 'image/png'
         return response
 
 @app.route('/image/upload/convert/convert.png', methods = ['GET', 'POST'])
 def convertoutput():
     if request.method == 'GET':
-        response = make_response(open('app/image/upload/convert/convert.png','rb').read())
+        response = make_response(open('image/upload/convert/convert.png','rb').read())
         response.headers['Content-Type'] = 'image/png'
         return response
 
@@ -91,5 +91,5 @@ def makePrivate():
     return render_template('submissions.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
