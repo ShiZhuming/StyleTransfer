@@ -18,7 +18,7 @@ import time
 
 import random
 
-from os import remove
+from os import remove, listdir
 
 # 保证安全，只接受图片
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'gif', 'GIF', 'jpeg', 'GPEG','pdf', 'PDF','bmp','jpg','png','tif','gif','pcx','tga','exif','fpx','svg','psd','cdr','pcd','dxf','ufo','eps','ai','raw','WMF','webp','jpeg'])
@@ -79,7 +79,6 @@ def upload_style(filename):
             return 'Sorry, save error, Please upload a figure, try again.'
     # 从服务器获取
     elif request.method == 'GET':
-        print(filename)
         response = make_response(open('image/upload/style/'+filename,'rb').read())
         response.headers['Content-Type'] = 'image/png'
         return response
@@ -106,6 +105,15 @@ def makePrivate(rand):
     remove('image/upload/style/style'+rand+'.png')
     remove('image/upload/convert/convert'+rand+'.png')
     return redirect('/index')
+
+@app.route('/show',methods = ['GET','POST'])
+def show():
+    files = []
+    for f in listdir('image/upload/convert/'):
+        if f != 'README.md':
+            files.append(f[7:-4])
+    return render_template('show.html',result=files)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
