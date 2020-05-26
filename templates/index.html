@@ -88,7 +88,7 @@
                                 </div>
                             </div>
                             <div id="upload-photo" class="tab-pane fade in active">
-                                <form enctype="multipart/form-data" method="post" id="content-image-form" class="dropzone needsclick dz-clickable selected" action="/image/upload/content" data-hash="">
+                                <form enctype="multipart/form-data" method="post" id="content-image-form" class="dropzone needsclick dz-clickable selected" action="/image/upload/content/content{{rand}}.png" data-hash="">
                                     <div class="dz-message needsclick">
                                         <p style="font-weight: bold"><font size="5" color="gray">Upload your photo as the content.</font></p>
                                         <p><font color='gray'>(Drop your photo here or click to select one from your computer.)</font></p>
@@ -108,7 +108,7 @@
                             </div>
                             
                             <div id="upload-style" class="tab-pane fade in active">
-                                <form enctype="multipart/form-data" method="post" id="style-image-form" class="dropzone needsclick dz-clickable selected" action="/image/upload/style" data-hash="">
+                                <form enctype="multipart/form-data" method="post" id="style-image-form" class="dropzone needsclick dz-clickable selected" action="/image/upload/style/style{{rand}}.png" data-hash="">
                                     <div class="dz-message needsclick">
                                         <p style="font-weight: bold"><font size="5" color="gray">Upload your image as the style.</font></p>
                                         <p><font color='gray'>(Drop your image here or click to select one from your computer.)</font></p>
@@ -129,7 +129,7 @@
 
         <!-- 提交 -->
 
-        <form action="/submit" style="margin-top: 0px" method="post" class="form-horizontal">
+        <form action="/submit/{{rand}}" style="margin-top: 0px" method="post" class="form-horizontal">
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">
                     Submit
