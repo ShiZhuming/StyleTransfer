@@ -14,8 +14,10 @@ from os.path import join, dirname, realpath, abspath
 
 from convert import transfer
 
+import time
+
 # 保证安全，只接受图片
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'gif', 'GIF'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'gif', 'GIF', 'jpeg', 'GPEG','pdf', 'PDF','bmp','jpg','png','tif','gif','pcx','tga','exif','fpx','svg','psd','cdr','pcd','dxf','ufo','eps','ai','raw','WMF','webp','jpeg'])
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
@@ -43,7 +45,10 @@ def upload_content():
     if request.method == 'POST':
         f = request.files.get('image')
         if allowed_file(f.filename):
-            f.save('./image/upload/content/content.png')
+            try:
+                f.save('./image/upload/content/content.png')
+            except BaseException:
+                print('save error!')
             return render_template('index.html')
         else :
             # 异常处理！
@@ -53,8 +58,11 @@ def upload_content():
 def upload_style():
     if request.method == 'POST':
         f = request.files.get('image')
-        f.save('./image/upload/style/style.png')
-        return render_template('index.html')
+        if allowed_file(f.filename):
+            f.save('./image/upload/style/style.png')
+            return render_template('index.html')
+        else:
+            return render_template('index.html')
 
 @app.route('/submit',methods = ['GET','POST'])
 def submit():
