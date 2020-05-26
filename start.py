@@ -18,6 +18,8 @@ import time
 
 import random
 
+from os import remove
+
 # 保证安全，只接受图片
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'gif', 'GIF', 'jpeg', 'GPEG','pdf', 'PDF','bmp','jpg','png','tif','gif','pcx','tga','exif','fpx','svg','psd','cdr','pcd','dxf','ufo','eps','ai','raw','WMF','webp','jpeg'])
 def allowed_file(filename):
@@ -98,9 +100,12 @@ def convertoutput(filename):
         response.headers['Content-Type'] = 'image/png'
         return response
 
-@app.route('/makePrivate', methods = ['GET', 'POST'])
-def makePrivate():
-    return render_template('submissions.html')
+@app.route('/makePrivate/<string:rand>', methods = ['GET', 'POST'])
+def makePrivate(rand):
+    remove('image/upload/content/content'+rand+'.png')
+    remove('image/upload/style/style'+rand+'.png')
+    remove('image/upload/convert/convert'+rand+'.png')
+    return redirect('/index')
 
 if __name__ == '__main__':
     app.run(debug=True)
