@@ -21,10 +21,25 @@
         <!-- 提供字体 -->
         <link rel="stylesheet" href="https://dhbhdrzi4tiry.cloudfront.net/cdn/sites/foundation.min.css">
         <script type="text/javascript" src="https://deepart-io.s3.amazonaws.com/CACHE/js/ad004c2f14b6.js"></script>
+    
+        <!-- 懒加载 -->
+        <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery_lazyload/1.9.7/jquery.lazyload.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+        <style>
+            img {
+                display: block;
+                /* width: 256px;
+                height: 256px; */
+                margin-bottom: 20px;
+            }
+        </style>
     </head>
+
     <body>
+        <!-- 头部 -->
+
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-            <!-- <div class="container-fluid"> -->
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -34,15 +49,14 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html" style="font-weight: bold">Style Transfer</a>
+                    <a class="navbar-brand" href="/index" style="font-weight: bold">Style Transfer</a>
                 </div>
                 <div class="collapse navbar-collapse" id="example-navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/show">Previous artworks</a></li>
-                        <li class="active"><a href="index.html" style="font-weight: bold; text-decoration: underline;">Try it!</a></li>
+                        <li class="active"><a href="/show" style="font-weight: bold; text-decoration: underline;">Previous artworks</a></li>
+                        <li><a href="/index">Try it!</a></li>
                         <li><a href="#">Our methods</a></li>
                         <li><a href="https://github.com/ShiZhuming/StyleTransfer/">Source code</a></li>
-                        <!-- <li><a href="#">Contact us</a></li> -->
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 Contact us <b class="caret"></b>
@@ -60,6 +74,8 @@
             </div>
         </nav>
 
+        <!-- 内容 -->
+
         <div class="content-container">
             <div class="container">
                 <div class="page-header">
@@ -68,24 +84,32 @@
             </div>
             <div class="container">
                 <h4></h4>
-	            <div class="row submissions submission likes" id="xoftwZXc1">
-                    <div class="col-md-3 col-sm-4 col-xs-12 text-center">
-                        <a href="/image/upload/convert/convert{{rand}}.png"><img class="img-responsive" src="/image/upload/convert/convert{{rand}}.png"></a>
-                    </div>
-                    <div class="col-md-3 col-sm-4 col-xs-6 text-center">
-                        <a href="/image/upload/content/content{{rand}}.png"><img class="img-responsive" src="/image/upload/content/content{{rand}}.png"></a>
-                    </div>
-                    <div class="col-md-3 col-sm-4 col-xs-6 text-center">
-                        <a href="/image/upload/style/style{{rand}}.png"><img class="img-responsive" src="/image/upload/style/style{{rand}}.png"></a>
-                    </div>
-                    <div class="col-md-3 col-sm-12 col-xs-12 text-center">
-                        <p>Your image will be made public on this webside. <br />If you do not want it to be made public, please click 'Make private' to delete it from our server.</p>
-                        <div class="btn-group" role="group" aria-label="...">
-                            <a class="btn btn-default" href="/image/upload/convert/convert{{rand}}.png" download="convert.png">Download artwork</a>
-                            <a class="btn btn-default" href="/makePrivate/{{rand}}">Make private</a>
-                            <a class="btn btn-default" href="/index">Try again</a>
+                <div class="row submissions submission likes" id="xoftwZXc1">
+                    <div>
+                        {% for value in result %}
+                        <div class="col-md-4 col-sm-6 col-xs-12" id="hF1UF7DX">
+                            <div style="margin-bottom: 15px;">
+                                <a href="/image/upload/convert/convert{{value}}.png">
+                                    <img class="lazy" data-original="/image/upload/convert/convert{{value}}.png">
+                                </a>
+                            </div>
+                            <div style="margin-bottom: 45px; text-align: center; vertical-align: middle;">
+                                <div style="float: left; width: 50%; text-align: left;">
+                                    <a href="/image/upload/content/content{{value}}.png">
+                                        <img class="lazy" data-original="/image/upload/content/content{{value}}.png">
+                                    </a>
+                                </div>
+                                <div style="float: right; width: 50%; text-align: right">
+                                    <a href="/image/upload/style/style{{value}}.png">
+                                        <img class="lazy" data-original="/image/upload/style/style{{value}}.png">
+                                    </a>
+                                </div>
+                                <div style="clear: both"></div> 	
+                            </div>
                         </div>
+                        {% endfor %}
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -113,4 +137,11 @@
             </div>
         </footer>
     </body>
+
+    <script type="text/javascript" charset="utf-8">
+        $(function() {
+            $("img.lazy").lazyload({effect: "fadeIn"});
+        });
+      </script>
+
 </html>
