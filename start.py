@@ -32,8 +32,10 @@ def base():
 @app.route('/favicon.ico', methods = ['GET'])
 def favicon():
     if request.method == 'GET':
-        response = make_response(open('favicon.ico','rb').read())
+        ico = open('favicon.ico','rb')
+        response = make_response(ico.read())
         response.headers['Content-Type'] = 'image/png'
+        ico.close()
         return response
 
 @app.route('/entry')
@@ -60,8 +62,10 @@ def upload_content(filename):
             return 'Sorry, save error, Please upload a figure, try again.'
     # 从服务器到前端
     elif request.method == 'GET':
-        response = make_response(open('image/upload/content/'+filename,'rb').read())
+        image = open('image/upload/content/'+filename,'rb')
+        response = make_response(image.read())
         response.headers['Content-Type'] = 'image/png'
+        image.close()
         return response
 
 @app.route('/image/upload/style/<string:filename>', methods = ['GET', 'POST'])
@@ -79,8 +83,10 @@ def upload_style(filename):
             return 'Sorry, save error, Please upload a figure, try again.'
     # 从服务器获取
     elif request.method == 'GET':
-        response = make_response(open('image/upload/style/'+filename,'rb').read())
+        image = open('image/upload/style/'+filename,'rb')
+        response = make_response(image.read())
         response.headers['Content-Type'] = 'image/png'
+        image.close()
         return response
 
 @app.route('/submit/<string:rand>',methods = ['GET','POST'])
@@ -95,8 +101,10 @@ def submit(rand):
 @app.route('/image/upload/convert/<string:filename>', methods = ['GET', 'POST'])
 def convertoutput(filename):
     if request.method == 'GET':
-        response = make_response(open('image/upload/convert/'+filename,'rb').read())
+        image = open('image/upload/convert/'+filename,'rb')
+        response = make_response(image.read())
         response.headers['Content-Type'] = 'image/png'
+        image.close()
         return response
 
 @app.route('/makePrivate/<string:rand>', methods = ['GET', 'POST'])

@@ -20,8 +20,14 @@ def transfer(contentpath,stylepath,converted,pixel=512,model_path='static/202005
     '''一次前传得到风格化图像'''
     mytransfer=test_transform(pixel)
 
-    contentimg = Image.open(str(contentpath)).convert('RGB')
-    styleimg = Image.open(str(stylepath)).convert('RGB')
+    contentfile = open(str(contentpath),'rb')
+    stylefile = open(str(stylepath),'rb')
+
+    contentimg = Image.open(contentfile).convert('RGB')
+    styleimg = Image.open(stylefile).convert('RGB')
+    
+    contentfile.close()
+    stylefile.close()
 
     contentimg=mytransfer(contentimg).unsqueeze(0)
     styleimg=mytransfer(styleimg).unsqueeze(0)
