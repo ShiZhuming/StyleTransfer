@@ -141,3 +141,6 @@ test/
 *.GIF
 image/
 *.txt
+
+# confid
+*.conf.py
