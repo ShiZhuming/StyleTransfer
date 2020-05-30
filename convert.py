@@ -50,10 +50,6 @@ def transfer(contentpath,stylepath,converted,pixel=512,model_path='static/202005
 
 
 
-#if __name__ == "__main__":
-    #content=input()
-    #style=input()
-    #transfer(content ,style ,'d:/Code/AI/finalproject/result/result.png',512)
                 
 
         
