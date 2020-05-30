@@ -138,7 +138,10 @@ class FPnet(nn.Module):
         self.decoder = decoder
         self.mseloss = nn.MSELoss()
         self.encoder.load_state_dict(torch.load('static/vgg_normalised.pth'))
-        if test: self.encoder=self.encoder.eval()
+        if test: #测试情形
+            self.encoder=self.encoder.eval()
+            for param in self.decoder.parameters():
+                param.requires_grad = False#测试时对decoder不进行梯度下降，防止显存爆炸
         for param in self.encoder.parameters():
             param.requires_grad = False#对encoder不进行梯度下降
 
@@ -162,11 +165,10 @@ class FPnet(nn.Module):
 
     def forward(self,content,style,alpha=1.0,lamda=10.0,require_loss=True):
         '''一次前传计算损失'''
-        if True:
-            # content=content.to(device)
-            # style=style.to(device)
-            content=content.to(torch.device("cpu"))
-            style=style.to(torch.device("cpu"))
+        # content=content.to(device)
+        # style=style.to(device)
+        content=content.to(torch.device("cpu"))
+        style=style.to(torch.device("cpu"))
 
         style_features=self.encode(style)
         content_features=self.encode(content)
