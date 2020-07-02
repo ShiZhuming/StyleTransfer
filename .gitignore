@@ -144,3 +144,7 @@ image/
 
 # confid
 *.conf.py
+*.ini
+
+# pth files
+*.pth

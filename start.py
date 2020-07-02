@@ -20,6 +20,8 @@ import random
 
 from os import remove, listdir
 
+from config import modelpath, record
+
 # 保证安全，只接受图片
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'gif', 'GIF', 'jpeg', 'GPEG','pdf', 'PDF','bmp','jpg','png','tif','gif','pcx','tga','exif','fpx','svg','psd','cdr','pcd','dxf','ufo','eps','ai','raw','WMF','webp','jpeg'])
 def allowed_file(filename):
@@ -44,7 +46,7 @@ def entry():
 
 @app.route('/index', methods = ['GET', 'POST'])
 def entry_page() -> 'html':
-    return render_template('index.html',rand=str(random.randint(1,(1<<31))))
+    return render_template('index.html',rand=str(random.randint(1,(1<<31))), icp=record['icp'], gongan=record['gongan'])
 
 @app.route('/image/upload/content/<string:filename>', methods = ['GET', 'POST'])
 def upload_content(filename):
@@ -56,7 +58,7 @@ def upload_content(filename):
                 f.save('image/upload/content/'+filename)
             except BaseException:
                 return 'Sorry, save error, Please upload a figure, try again.'
-            return render_template('index.html',rand=filename[7:-4])
+            return render_template('index.html',rand=filename[7:-4], icp=record['icp'], gongan=record['gongan'])
         else :
             # 异常处理！
             return 'Sorry, save error, Please upload a figure, try again.'
@@ -78,7 +80,7 @@ def upload_style(filename):
                 f.save('image/upload/style/'+filename)
             except BaseException:
                 return 'Sorry, save error, Please upload a figure, try again.'
-            return render_template('index.html',rand=filename[5:-4])
+            return render_template('index.html',rand=filename[5:-4], icp=record['icp'], gongan=record['gongan'])
         else:
             return 'Sorry, save error, Please upload a figure, try again.'
     # 从服务器获取
@@ -95,8 +97,8 @@ def submit(rand):
     contentpath = 'image/upload/content/content'+rand+'.png'
     stylepath = 'image/upload/style/style'+rand+'.png'
     convertpath = 'image/upload/convert/convert'+rand+'.png'
-    transfer(contentpath, stylepath, convertpath)
-    return render_template('submissions.html',rand=rand)
+    transfer(contentpath, stylepath, convertpath, model_path=modelpath['decoder'])
+    return render_template('submissions.html',rand=rand, icp=record['icp'], gongan=record['gongan'])
 
 @app.route('/image/upload/convert/<string:filename>', methods = ['GET', 'POST'])
 def convertoutput(filename):
@@ -120,7 +122,7 @@ def show():
     for f in listdir('image/upload/convert/'):
         if f != 'README.md':
             files.append(f[7:-4])
-    return render_template('show.html',result=files)
+    return render_template('show.html',result=files, icp=record['icp'], gongan=record['gongan'])
 
 
 if __name__ == '__main__':

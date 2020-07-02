@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torchvision.models as models
 from function import AdaIN,get_mean_std
+from config import modelpath
 
 # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")#训练设备
 
@@ -137,7 +138,7 @@ class FPnet(nn.Module):
         self.encoder = vgg
         self.decoder = decoder
         self.mseloss = nn.MSELoss()
-        self.encoder.load_state_dict(torch.load('static/vgg_normalised.pth'))
+        self.encoder.load_state_dict(torch.load(modelpath['vgg']))
         if test: #测试情形
             self.encoder=self.encoder.eval()
             for param in self.decoder.parameters():
