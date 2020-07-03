@@ -139,6 +139,8 @@ test/
 *.PNG
 *.gif
 *.GIF
+*.jpeg
+*.JPEG
 image/
 *.txt
 

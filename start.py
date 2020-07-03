@@ -42,6 +42,15 @@ def favicon():
         ico.close()
         return response
 
+@app.route('/static/szm.jpg', methods = ['GET'])
+def szmphoto():
+    if request.method == 'GET':
+        ico = open('static/szm.jpg','rb')
+        response = make_response(ico.read())
+        response.headers['Content-Type'] = 'image/png'
+        ico.close()
+        return response
+
 @app.route('/entry')
 def entry():
     return redirect('/index')
@@ -76,49 +85,6 @@ def upload_content(subpath):
         image.close()
         return response
 
-# @app.route('/image/upload/content/<string:filename>', methods = ['GET', 'POST'])
-# def upload_content(filename):
-#     # 上传到服务器保存
-#     if request.method == 'POST':
-#         f = request.files.get('image')
-#         if allowed_file(f.filename):
-#             try:
-#                 f.save('image/upload/content/'+filename)
-#             except BaseException:
-#                 return 'Sorry, save error, Please upload a figure, try again.'
-#             return render_template('index.html',rand=filename[7:-4], icp=record['icp'], gongan=record['gongan'])
-#         else :
-#             # 异常处理！
-#             return 'Sorry, save error, Please upload a figure, try again.'
-#     # 从服务器到前端
-#     elif request.method == 'GET':
-#         image = open('image/upload/content/'+filename,'rb')
-#         response = make_response(image.read())
-#         response.headers['Content-Type'] = 'image/png'
-#         image.close()
-#         return response
-
-# @app.route('/image/upload/style/<string:filename>', methods = ['GET', 'POST'])
-# def upload_style(filename):
-#     # 给服务器保存
-#     if request.method == 'POST':
-#         f = request.files.get('image')
-#         if allowed_file(f.filename):
-#             try:
-#                 f.save('image/upload/style/'+filename)
-#             except BaseException:
-#                 return 'Sorry, save error, Please upload a figure, try again.'
-#             return render_template('index.html',rand=filename[5:-4], icp=record['icp'], gongan=record['gongan'])
-#         else:
-#             return 'Sorry, save error, Please upload a figure, try again.'
-#     # 从服务器获取
-#     elif request.method == 'GET':
-#         image = open('image/upload/style/'+filename,'rb')
-#         response = make_response(image.read())
-#         response.headers['Content-Type'] = 'image/png'
-#         image.close()
-#         return response
-
 @app.route('/submit/<string:rand>',methods = ['GET','POST'])
 def submit(rand):
     # 执行风格化函数，生成图像。
@@ -128,15 +94,6 @@ def submit(rand):
     transfer(contentpath, stylepath, convertpath, model_path=modelpath['decoder'])
     make_thumb(convertpath,(256,256))
     return render_template('submissions.html',rand=rand, icp=record['icp'], gongan=record['gongan'])
-
-# @app.route('/image/upload/convert/<string:filename>', methods = ['GET', 'POST'])
-# def convertoutput(filename):
-#     if request.method == 'GET':
-#         image = open('image/upload/convert/'+filename,'rb')
-#         response = make_response(image.read())
-#         response.headers['Content-Type'] = 'image/png'
-#         image.close()
-#         return response
 
 @app.route('/makePrivate/<string:rand>', methods = ['GET', 'POST'])
 def makePrivate(rand):
@@ -153,6 +110,9 @@ def show():
             files.append(f[7:-4])
     return render_template('show.html',result=files, icp=record['icp'], gongan=record['gongan'])
 
+@app.route('/authors', methods = ['GET', 'POST'])
+def authors() -> 'html':
+    return render_template('authors.html',icp=record['icp'], gongan=record['gongan'])
 
 if __name__ == '__main__':
     app.run(debug=True)
