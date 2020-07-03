@@ -22,6 +22,8 @@ from os import remove, listdir
 
 from config import modelpath, record
 
+from thumb import make_thumb
+
 # 保证安全，只接受图片
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'gif', 'GIF', 'jpeg', 'GPEG','pdf', 'PDF','bmp','jpg','png','tif','gif','pcx','tga','exif','fpx','svg','psd','cdr','pcd','dxf','ufo','eps','ai','raw','WMF','webp','jpeg'])
 def allowed_file(filename):
@@ -48,48 +50,74 @@ def entry():
 def entry_page() -> 'html':
     return render_template('index.html',rand=str(random.randint(1,(1<<31))), icp=record['icp'], gongan=record['gongan'])
 
-@app.route('/image/upload/content/<string:filename>', methods = ['GET', 'POST'])
-def upload_content(filename):
+@app.route('/image/<path:subpath>', methods = ['GET', 'POST'])
+def upload_content(subpath):
     # 上传到服务器保存
     if request.method == 'POST':
         f = request.files.get('image')
         if allowed_file(f.filename):
             try:
-                f.save('image/upload/content/'+filename)
+                f.save('image/'+subpath)
+                make_thumb('image/'+subpath)
             except BaseException:
                 return 'Sorry, save error, Please upload a figure, try again.'
-            return render_template('index.html',rand=filename[7:-4], icp=record['icp'], gongan=record['gongan'])
+            # for example , subpath = 'upload/content/content123456.png'
+            subpath = subpath.split('/')
+            num = subpath[-1].replace(subpath[-2],'').split('.')[-2]
+            return render_template('index.html',rand=num, icp=record['icp'], gongan=record['gongan'])
         else :
             # 异常处理！
             return 'Sorry, save error, Please upload a figure, try again.'
     # 从服务器到前端
     elif request.method == 'GET':
-        image = open('image/upload/content/'+filename,'rb')
+        image = open('image/'+subpath,'rb')
         response = make_response(image.read())
         response.headers['Content-Type'] = 'image/png'
         image.close()
         return response
 
-@app.route('/image/upload/style/<string:filename>', methods = ['GET', 'POST'])
-def upload_style(filename):
-    # 给服务器保存
-    if request.method == 'POST':
-        f = request.files.get('image')
-        if allowed_file(f.filename):
-            try:
-                f.save('image/upload/style/'+filename)
-            except BaseException:
-                return 'Sorry, save error, Please upload a figure, try again.'
-            return render_template('index.html',rand=filename[5:-4], icp=record['icp'], gongan=record['gongan'])
-        else:
-            return 'Sorry, save error, Please upload a figure, try again.'
-    # 从服务器获取
-    elif request.method == 'GET':
-        image = open('image/upload/style/'+filename,'rb')
-        response = make_response(image.read())
-        response.headers['Content-Type'] = 'image/png'
-        image.close()
-        return response
+# @app.route('/image/upload/content/<string:filename>', methods = ['GET', 'POST'])
+# def upload_content(filename):
+#     # 上传到服务器保存
+#     if request.method == 'POST':
+#         f = request.files.get('image')
+#         if allowed_file(f.filename):
+#             try:
+#                 f.save('image/upload/content/'+filename)
+#             except BaseException:
+#                 return 'Sorry, save error, Please upload a figure, try again.'
+#             return render_template('index.html',rand=filename[7:-4], icp=record['icp'], gongan=record['gongan'])
+#         else :
+#             # 异常处理！
+#             return 'Sorry, save error, Please upload a figure, try again.'
+#     # 从服务器到前端
+#     elif request.method == 'GET':
+#         image = open('image/upload/content/'+filename,'rb')
+#         response = make_response(image.read())
+#         response.headers['Content-Type'] = 'image/png'
+#         image.close()
+#         return response
+
+# @app.route('/image/upload/style/<string:filename>', methods = ['GET', 'POST'])
+# def upload_style(filename):
+#     # 给服务器保存
+#     if request.method == 'POST':
+#         f = request.files.get('image')
+#         if allowed_file(f.filename):
+#             try:
+#                 f.save('image/upload/style/'+filename)
+#             except BaseException:
+#                 return 'Sorry, save error, Please upload a figure, try again.'
+#             return render_template('index.html',rand=filename[5:-4], icp=record['icp'], gongan=record['gongan'])
+#         else:
+#             return 'Sorry, save error, Please upload a figure, try again.'
+#     # 从服务器获取
+#     elif request.method == 'GET':
+#         image = open('image/upload/style/'+filename,'rb')
+#         response = make_response(image.read())
+#         response.headers['Content-Type'] = 'image/png'
+#         image.close()
+#         return response
 
 @app.route('/submit/<string:rand>',methods = ['GET','POST'])
 def submit(rand):
@@ -98,16 +126,17 @@ def submit(rand):
     stylepath = 'image/upload/style/style'+rand+'.png'
     convertpath = 'image/upload/convert/convert'+rand+'.png'
     transfer(contentpath, stylepath, convertpath, model_path=modelpath['decoder'])
+    make_thumb(convertpath,(256,256))
     return render_template('submissions.html',rand=rand, icp=record['icp'], gongan=record['gongan'])
 
-@app.route('/image/upload/convert/<string:filename>', methods = ['GET', 'POST'])
-def convertoutput(filename):
-    if request.method == 'GET':
-        image = open('image/upload/convert/'+filename,'rb')
-        response = make_response(image.read())
-        response.headers['Content-Type'] = 'image/png'
-        image.close()
-        return response
+# @app.route('/image/upload/convert/<string:filename>', methods = ['GET', 'POST'])
+# def convertoutput(filename):
+#     if request.method == 'GET':
+#         image = open('image/upload/convert/'+filename,'rb')
+#         response = make_response(image.read())
+#         response.headers['Content-Type'] = 'image/png'
+#         image.close()
+#         return response
 
 @app.route('/makePrivate/<string:rand>', methods = ['GET', 'POST'])
 def makePrivate(rand):
