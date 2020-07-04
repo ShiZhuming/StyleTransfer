@@ -42,14 +42,14 @@ def make_thumb(filename, sizes=(128, 128)):
     #保存图片
     thumb.save(filename.replace('upload','thumb'), quality=100)
 
-# from os import listdir
+from os import listdir
 
-# if __name__ == '__main__':
-#     for p in ['convert/']:
-#         for f in listdir('image/upload/'+p):
-#             if f != 'README.md':
-#                 make_thumb('image/upload/'+p+f,sizes=(256,256))
-#     for p in ['content/','style/']:
-#         for f in listdir('image/upload/'+p):
-#             if f != 'README.md':
-#                 make_thumb('image/upload/'+p+f)
+if __name__ == '__main__':
+    for p in ['convert/']:
+        for f in listdir('image/upload/'+p):
+            if f != 'README.md':
+                make_thumb('image/upload/'+p+f,sizes=(256,256))
+    for p in ['content/','style/']:
+        for f in listdir('image/upload/'+p):
+            if f != 'README.md':
+                make_thumb('image/upload/'+p+f)
