@@ -114,6 +114,14 @@ def show():
 def authors() -> 'html':
     return render_template('authors.html',icp=record['icp'], gongan=record['gongan'])
 
+@app.route('/method', methods = ['GET'])
+def method() -> 'html':
+    ico = open('static/pre.pdf','rb')
+    response = make_response(ico.read())
+    response.headers['Content-Type'] = 'application/pdf'
+    ico.close()
+    return response
+
 if __name__ == '__main__':
     app.run(debug=True)
 

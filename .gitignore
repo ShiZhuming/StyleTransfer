@@ -143,6 +143,7 @@ test/
 *.JPEG
 image/
 *.txt
+*.pdf
 
 # confid
 *.conf.py
