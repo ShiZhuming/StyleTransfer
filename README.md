@@ -2,9 +2,9 @@
 
 ## Introduction
 
-This is a project of AI Introduction , a course of Peking University.
+This is a real-time image style transfer project based on AdaIn and VGG network , python flask as frontend and HTML5 as backend , project of AI Introduction, a course of Peking Unicersity
 
-Our website is [http://pkuszm.cn/show](http://pkuszm.cn)
+Our website is [http://pkuszm.cn/](http://pkuszm.cn/)
 
 ## Authors
 
@@ -22,6 +22,18 @@ Use `requirements.txt` to install packages
 $ pip3 install -r requirements.txt
 ```
 
+Use `start.py` to start web application
+```
+$ python3 start.py
+```
+
+It is recommended to use `virtualenv` and `gunicorn` to deploy the website on the server
+```
+$ pip install virtualenv
+$ virtualenv -p /usr/bin/python3 ENVE
+$ gunicorn -c gunicorn.conf.py --error-logfile errorlog.txt start:app -D
+```
+
 ## Structure
 
 ```
@@ -33,17 +45,23 @@ StyleTransfer/
 ├── net.py
 ├── train.py
 ├── convert.py
+├── thumb.py
 ├── favicon.ico
 ├── image
-|   └──  upload
-|       ├── content
-|       ├── style
-|       └── convert
+│   ├── upload
+│   │   ├── content
+│   │   ├── style
+│   │   └── convert
+│   └── thumb
+│       ├── content
+│       ├── style
+│       └── convert
 ├── static
 ├── templates
-|   ├── index.html
-|   ├── show.html
-|   └── submissions.html
+│   ├── index.html
+│   ├── show.html
+│   ├── authors.html
+│   └── submissions.html
 ├── test.py
 ├── .gitignore
 └── requirements.txt
