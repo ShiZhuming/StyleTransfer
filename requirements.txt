@@ -6,7 +6,7 @@ gevent==20.5.0
 greenlet==0.4.15
 gunicorn==20.0.4
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 numpy==1.18.4
 opencv-python==4.2.0.34
