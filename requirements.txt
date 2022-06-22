@@ -8,7 +8,7 @@ gunicorn==20.0.4
 itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
-numpy==1.18.4
+numpy==1.22.0
 opencv-python==4.2.0.34
 Pillow==7.1.2
 torch==1.5.0
